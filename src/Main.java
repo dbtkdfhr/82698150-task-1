@@ -21,6 +21,9 @@ public class Main {
             System.out.println("\n==== " + file + " ====");
             GPSLog gpsLog = new GPSLog("data/" + file);
             gpsLog.parse();
+
+            MapMatcher matcher = new MapMatcher(parser.nodes, parser.ways, gpsLog.points, ROUTE_WAY_IDS);
+            matcher.match();
         }
     }
 }

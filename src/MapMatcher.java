@@ -21,6 +21,41 @@ public class MapMatcher {
         this.routeWayIds = new HashSet<>(routeWayIds);
     }
 
+    public void match() {
+        matchedWayIds.clear();
+        isDeviationList.clear();
+
+        for (GPSPoint p : points) {
+            double minScore = Double.MAX_VALUE;
+            long bestWay = -1;
+
+            for (Way way : ways) {
+                for (int i = 1; i < way.nodeIds.size(); i++) {
+                    Node n1 = nodes.get(way.nodeIds.get(i - 1));
+                    Node n2 = nodes.get(way.nodeIds.get(i));
+                    if (n1 == null || n2 == null) continue;
+
+                    double dist = pointToSegmentDist(p.lat, p.lon, n1.lat, n1.lon, n2.lat, n2.lon);
+                    double segAngle = Math.atan2(n2.lon - n1.lon, n2.lat - n1.lat) * 180.0 / Math.PI;
+                    double angleDiff = Math.abs(normalizeAngle(p.angle - segAngle));
+
+                    double score = dist + (angleDiff > MAX_ANGLE_DIFF ? 1000.0 : 0.0);
+
+                    if (score < minScore) {
+                        minScore = score;
+                        bestWay = way.id;
+                    }
+                }
+            }
+
+            matchedWayIds.add(bestWay);
+
+            boolean deviation = !routeWayIds.contains(bestWay);
+
+            isDeviationList.add(deviation);
+        }
+    }
+
     private double pointToSegmentDist(double plat, double plon, double lat1, double lon1, double lat2, double lon2) {
         double avgLat = (plat + lat1 + lat2) / 3.0;
         double latMeter = 111_000;
