@@ -27,6 +27,12 @@ public class Main {
 
             String resultFile = "output/" + file.replace(".csv", "_result.csv");
             matcher.outputResult(resultFile);
+
+            if (matcher.hasContinuousDeviation(5)) { 
+                System.out.println("[경로이탈 있음]");
+            } else {
+                System.out.println("[경로이탈 없음]");
+            }
         }
     }
 }

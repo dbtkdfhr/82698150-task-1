@@ -73,6 +73,19 @@ public class MapMatcher {
         bw.close();
     }
 
+    public boolean hasContinuousDeviation(int minContinuous) {
+        int cur = 0;
+
+        for (boolean b : isDeviationList) {
+            if (b) cur++;
+            else cur = 0;
+            
+            if (cur >= minContinuous) return true;
+        }
+
+        return false;
+    }
+
     private double pointToSegmentDist(double plat, double plon, double lat1, double lon1, double lat2, double lon2) {
         double avgLat = (plat + lat1 + lat2) / 3.0;
         double latMeter = 111_000;
