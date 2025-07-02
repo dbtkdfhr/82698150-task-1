@@ -1,6 +1,7 @@
 package src;
 
 import java.util.*;
+import java.io.*;
 
 public class MapMatcher {
     Map<Long, Node> nodes;
@@ -54,6 +55,22 @@ public class MapMatcher {
 
             isDeviationList.add(deviation);
         }
+    }
+
+    public void outputResult(String outFile) throws Exception {
+        BufferedWriter bw = new BufferedWriter(new FileWriter(outFile));
+
+        bw.write("idx,Latitude,Longitude,Angle,Speed,HDOP,MatchedWayID,Deviation\n");
+
+        for (int i = 0; i < points.size(); i++) {
+            GPSPoint p = points.get(i);
+            long wid = matchedWayIds.get(i);
+            String deviation = isDeviationList.get(i) ? "이탈" : "정상";
+
+            bw.write(i + "," + p.lat + "," + p.lon + "," + p.angle + "," + p.speed + "," + p.hdop + "," + wid + "," + deviation + "\n");
+        }
+
+        bw.close();
     }
 
     private double pointToSegmentDist(double plat, double plon, double lat1, double lon1, double lat2, double lon2) {

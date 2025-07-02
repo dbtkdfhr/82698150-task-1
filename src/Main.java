@@ -24,6 +24,9 @@ public class Main {
 
             MapMatcher matcher = new MapMatcher(parser.nodes, parser.ways, gpsLog.points, ROUTE_WAY_IDS);
             matcher.match();
+
+            String resultFile = "output/" + file.replace(".csv", "_result.csv");
+            matcher.outputResult(resultFile);
         }
     }
 }
