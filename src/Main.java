@@ -10,5 +10,17 @@ public class Main {
     public static void main(String[] args) throws Exception {
         OSMParser parser = new OSMParser("data/roads.osm");
         parser.parse();
+
+        String[] gpsFiles = {
+            "gps_left_turn.csv", "gps_left02_turn.csv", "gps_reverse_direction.csv",
+            "gps_right_turn_01.csv", "gps_right02_turn.csv", "gps_straight01.csv",
+            "gps_straight02.csv", "gps_straight03.csv", "gps_straight04.csv", "gps_multipath.csv"
+        };
+
+        for (String file : gpsFiles) {
+            System.out.println("\n==== " + file + " ====");
+            GPSLog gpsLog = new GPSLog("data/" + file);
+            gpsLog.parse();
+        }
     }
 }
